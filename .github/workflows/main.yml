@@ -3,7 +3,7 @@ name: Zomato app deployment CI-CD
 on:
   push:
     branches:
-      - main 
+      - Dockerfile
 
 jobs:
   build-test-deploy:
