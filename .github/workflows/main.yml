@@ -24,11 +24,11 @@ jobs:
 
       # Build the Docker image
       - name: Build the Docker image
-        run: docker build -t ${{ vars.DOCKER_USERNAME }}/zomatoimage:latest .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/zomatoimage:latest .
 
       # Push image to Docker Hub
       - name: Push to Docker Hub
-        run: docker push ${{ vars.DOCKER_USERNAME }}/zomatoimage:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/zomatoimage:latest
 
       # Deploy to EC2 using SSH
       - name: Deploy on EC2
@@ -38,8 +38,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            docker pull ${{ vars.DOCKER_USERNAME }}/zomatoimage:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/zomatoimage:latest
             docker stop zomato-container || true
             docker rm zomato-container || true
-            docker run -d -p 80:80 --name zomato-container ${{ vars.DOCKER_USERNAME }}/zomatoimage:latest
+            docker run -d -p 80:80 --name zomato-container ${{ secrets.DOCKER_USERNAME }}/zomatoimage:latest
    
