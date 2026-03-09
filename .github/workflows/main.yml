@@ -39,5 +39,5 @@ jobs:
             docker pull ${{ secrets.DOCKER_USER }}/zomatoimage:latest
             docker stop zomato-container || true
             docker rm zomato-container || true
-            docker run -d -p 4000:4173 --name zomato-container ${{ secrets.DOCKER_USER }}/zomatoimage:latest
+            docker run -d -p 3000:4173 --name zomato-container ${{ secrets.DOCKER_USER }}/zomatoimage:latest
    
