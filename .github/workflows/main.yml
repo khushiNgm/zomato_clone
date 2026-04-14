@@ -33,11 +33,10 @@ jobs:
           exit-code: '0' # Fails the build if vulnerabilities are found
           severity: 'CRITICAL,HIGH'
       - name: Upload trivy report 
-        uses: action/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: trivy-report
           path: trivy-report.json
-          retention-days: 
           
       # Push image to Docker Hub
       # - name: Push to Docker Hub
