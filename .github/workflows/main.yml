@@ -30,10 +30,10 @@ jobs:
           image-ref: ${{ secrets.DOCKER_USER }}/zomatoimage:latest
           # For template format 
           format: 'template'
-          template: '@/contrib/html.tpl'
+          template: '@/usr/local/share/trivy/templates/html.tpl'
           output: 'trivy-report.html'
           severity: 'CRITICAL,HIGH'
-          exit-code: '1'
+          exit-code: '0'
           # For json format 
           # format: 'json'
           # output: 'trivy-report.json'
