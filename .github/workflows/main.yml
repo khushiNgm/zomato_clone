@@ -24,13 +24,18 @@ jobs:
       - name: Build the Docker image
         run: docker build -t ${{ secrets.DOCKER_USER }}/zomatoimage:latest .
 
+      - name: Download Trivy HTML template
+        run: |
+         mkdir -p trivy-template
+         curl -L https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o trivy-template/html.tpl
+         
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ secrets.DOCKER_USER }}/zomatoimage:latest
           # For template format 
           format: 'template'
-          template: '@/usr/local/share/trivy/templates/html.tpl'
+          template: '@/github/workspace/trivy-template/html.tpl'
           output: 'trivy-report.html'
           severity: 'CRITICAL,HIGH'
           exit-code: '0'
