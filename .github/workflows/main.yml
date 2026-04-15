@@ -17,6 +17,11 @@ jobs:
       # Build the Docker image
       - name: Build the Docker image
         run: docker build -t ${{ secrets.DOCKER_USER }}/zomatoimage:latest .
+      -  name: SonarQube Scan
+         uses: sonarsource/sonarqube-scan-action@master
+         env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} 
 
       - name: Scan Docker Image
         uses: aquasecurity/trivy-action@master
