@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master 
+
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest   
@@ -13,45 +14,65 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
 
-      # # Login to Docker Hub
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_USER }}
-      #     password: ${{ secrets.PASSWORD_DOCKER }}
-
       # Build the Docker image
       - name: Build the Docker image
         run: docker build -t ${{ secrets.DOCKER_USER }}/zomatoimage:latest .
 
-      - name: Download Trivy HTML template
-        run: |
-         mkdir -p trivy-template
-         curl -L https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o trivy-template/html.tpl
-         
-      - name: Run Trivy vulnerability scanner
+      - name: Scan Docker Image
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ secrets.DOCKER_USER }}/zomatoimage:latest
-          # For template format 
-          format: 'template'
-          template: '@trivy-template/html.tpl'
-          output: 'trivy-report.html'
           severity: 'CRITICAL,HIGH'
-          exit-code: '0'
-          # For json format 
-          # format: 'json'
-          # output: 'trivy-report.json'
-          # exit-code: '0' # Fails the build if vulnerabilities are found
-          # severity: 'CRITICAL,HIGH'
-          
-      - name: Upload trivy report 
-        uses: actions/upload-artifact@v4
-        with:
-          name: trivy-report
-          # path: trivy-report.json
-          path: trivy-report.html
 
+      - name: Scan Application Packages
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          severity: 'CRITICAL,HIGH'
+
+
+
+
+# name: Zomato app deployment CI-CD
+
+# on:
+#   push:
+#     branches:
+#       - master 
+# jobs:
+#   build-test-deploy:
+#     runs-on: ubuntu-latest   
+
+#     steps:
+#       # Clone the code
+#       - name: Checkout the code
+#         uses: actions/checkout@v4
+
+#       # # Login to Docker Hub
+#       # - name: Login to Docker Hub
+#       #   uses: docker/login-action@v3
+#       #   with:
+#       #     username: ${{ secrets.DOCKER_USER }}
+#       #     password: ${{ secrets.PASSWORD_DOCKER }}
+
+#       # Build the Docker image
+#       - name: Build the Docker image
+#         run: docker build -t ${{ secrets.DOCKER_USER }}/zomatoimage:latest .
+
+#     - name: Scan Docker Image
+#       uses: aquasecurity/trivy-action@master
+#       with:
+#        image-ref: ${{ secrets.DOCKER_USER }}/zomatoimage:latest
+#        severity: 'CRITICAL,HIGH'
+
+#    - name: Scan Application Packages
+#      uses: aquasecurity/trivy-action@master
+#      with:
+#       scan-type: 'fs'
+#       scan-ref: '.'
+#       severity: 'CRITICAL,HIGH'
+  
       # Push image to Docker Hub
       # - name: Push to Docker Hub
       #   run: docker push ${{ secrets.DOCKER_USER }}/zomatoimage:latest
