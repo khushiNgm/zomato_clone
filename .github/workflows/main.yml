@@ -25,6 +25,7 @@ jobs:
           -Dsonar.projectKey=zomato_clone
           -Dsonar.projectName=zomato_clone
           -Dsonar.sources=.
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
       - name: Scan Docker Image
         uses: aquasecurity/trivy-action@master
