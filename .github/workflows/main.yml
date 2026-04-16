@@ -22,8 +22,8 @@ jobs:
          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
          args: >
-          -Dsonar.projectKey=zomato_clone
-          -Dsonar.projectName=zomato_clone
+          -Dsonar.projectKey=zomato_clone_GitHubAction
+          -Dsonar.projectName=zomato_clone_GitHubAction
           -Dsonar.sources=.
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
